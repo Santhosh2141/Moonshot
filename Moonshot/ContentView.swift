@@ -31,10 +31,55 @@ struct CustomText:View{
 
 struct ContentView: View {
     
-    let astronauts = Bundle.main.decode("astronauts.json")
+    // we are defining it as dict of astonauts so that it knows what it load when we call it
+    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
+    let mission: [Missions] = Bundle.main.decode("missions.json")
     
+    let columns = [
+        GridItem(.adaptive(minimum: 150))
+    ]
     var body: some View {
-        Text(String(astronauts.count))
+        NavigationStack{
+            ScrollView{
+                LazyVGrid(columns: columns){
+                    ForEach(mission) { mission in
+                        NavigationLink{
+                            Text("Detail view")
+                        } label: {
+                            VStack{
+                                Image(mission.imageName)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                                    .padding()
+                                VStack{
+                                    Text(mission.displayName)
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .bold()
+                                    Text(mission.formattedLaunchDate)
+                                        .font(.headline)
+                                        .foregroundColor(.gray)
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(.lightBackground)
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.lightBackground)
+                            )
+                        }
+                    }
+                }
+                .padding([.horizontal, .bottom])
+            }
+            .navigationTitle("MoonShot")
+            .background(.darkBackground)
+            // this says that its always dark color theme
+            .preferredColorScheme(.dark)
+        }
 //        NavigationStack{
 //            List(0..<100){ row in
 //                NavigationLink("Row \(row)"){
