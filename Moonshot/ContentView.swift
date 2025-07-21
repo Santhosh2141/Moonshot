@@ -12,61 +12,63 @@ struct CustomText:View{
         Text(text)
             .font(.title2)
     }
-    
+
     init(text: String) {
         self.text = text
         print("Creating a custom text \(text)")
     }
 }
-
-struct User: Codable {
-    let name: String
-    let address: Address
-}
-
-struct Address: Codable {
-    let street: String
-    let city: String
-}
+//
+//struct User: Codable {
+//    let name: String
+//    let address: Address
+//}
+//
+//struct Address: Codable {
+//    let street: String
+//    let city: String
+//}
 
 struct ContentView: View {
+    
+    let astronauts = Bundle.main.decode("astronauts.json")
+    
     var body: some View {
-        NavigationStack{
-            List(0..<100){ row in
-                NavigationLink("Row \(row)"){
-                    Button("Decode JSON") {
-                        let input = """
-                        {
-                            "name": "Taylor Swift",
-                            "address": {
-                                "street": "555, Taylor Swift Avenue",
-                                "city": "Nashville"
-                            }
-                        }
-                        """
-                        let data = Data(input.utf8)
-                        let decoder = JSONDecoder()
-                        
-                        if let user = try? decoder.decode(User.self, from: data){
-                            print(user.address.street)
-                        }
-                    }
-                }
-            }
-            NavigationLink{
-                ScrollView1()
-            } label: {
-                VStack{
-                    Text("This is a line")
-                    Text("So is this")
-                    Image(systemName: "face.smiling")
-                }
-                .font(.largeTitle)
-            }
-                .navigationTitle("SwiftUI")
-        }
-
-        
+        Text(String(astronauts.count))
+//        NavigationStack{
+//            List(0..<100){ row in
+//                NavigationLink("Row \(row)"){
+//                    Button("Decode JSON") {
+//                        let input = """
+//                        {
+//                            "name": "Taylor Swift",
+//                            "address": {
+//                                "street": "555, Taylor Swift Avenue",
+//                                "city": "Nashville"
+//                            }
+//                        }
+//                        """
+//                        let data = Data(input.utf8)
+//                        let decoder = JSONDecoder()
+//
+//                        if let user = try? decoder.decode(User.self, from: data){
+//                            print(user.address.street)
+//                        }
+//                    }
+//                }
+//            }
+//            NavigationLink{
+//                ScrollView1()
+//            } label: {
+//                VStack{
+//                    Text("This is a line")
+//                    Text("So is this")
+//                    Image(systemName: "face.smiling")
+//                }
+//                .font(.largeTitle)
+//            }
+//                .navigationTitle("SwiftUI")
+//        }
     }
 }
 
