@@ -43,8 +43,7 @@ struct MissionView: View {
                         .padding(.vertical)
                     
                     Text("Mission Highlights")
-                        .font(.title.bold())
-                        .padding(.bottom, 5)
+                        
                     Text(mission.description)
                 
                     Rectangle()
@@ -59,11 +58,11 @@ struct MissionView: View {
                 .padding(.horizontal)
                 
                 ScrollView(.horizontal, showsIndicators: false){
-                    NavigationLink{
-                        Text("Astronaut Details: ")
-                    } label: {
-                        HStack{
-                            ForEach(crew, id: \.role) { crewMember in
+                    HStack{
+                        ForEach(crew, id: \.role) { crewMember in
+                            NavigationLink{
+                                AstronautView(astronaut: crewMember.astronaut)
+                            } label: {
                                 Image(crewMember.astronaut.id)
                                     .resizable()
                                     .scaledToFit()
@@ -72,7 +71,7 @@ struct MissionView: View {
                                     .overlay(
                                         Capsule()
                                             .strokeBorder(.white, lineWidth: 2)
-                
+                                        
                                     )
                                 VStack(alignment: .leading){
                                     Text(crewMember.astronaut.name)
@@ -81,10 +80,9 @@ struct MissionView: View {
                                     Text(crewMember.role)
                                         .foregroundColor(.gray)
                                 }
-                                
                             }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
                 }
             }
