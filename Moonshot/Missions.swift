@@ -9,9 +9,9 @@ import Foundation
 
 
 
-struct Missions: Codable, Identifiable {
+struct Missions: Codable, Identifiable, Hashable {
     // this is caled nested structs
-    struct CrewRole: Codable {
+    struct CrewRole: Codable, Hashable {
         let name: String
         let role: String
     }

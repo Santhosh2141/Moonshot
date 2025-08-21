@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MissionView: View {
     
-    struct CrewMember{
+    struct CrewMember: Hashable{
         
         let role: String
         let astronaut: Astronaut
@@ -19,62 +19,65 @@ struct MissionView: View {
     let crew: [CrewMember]
     
     var body: some View {
-        ScrollView{
-            VStack{
-                GeometryReader { geometry in
-                    Image(mission.imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: geometry.size.width * 0.6)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                    // this is ios15+
-//            .containerRelativeFrame(.horizontal) { width, axis in
-//                  width * 0.6
-//            }
-                }
-                .frame(height: 200)
-                .padding(.vertical)
-                
-                Text(mission.formattedLaunchDateDetailed)
-                    .font(.title.bold())
-                    .padding(.bottom, 5)
-                
-                VStack(alignment: .leading){
-    
-                    DividerView()
+        NavigationStack{
+            ScrollView{
+                VStack{
+                    GeometryReader { geometry in
+                        Image(mission.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: geometry.size.width * 0.6)
+                            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                        // this is ios15+
+    //            .containerRelativeFrame(.horizontal) { width, axis in
+    //                  width * 0.6
+    //            }
+                    }
+                    .frame(height: 200)
+                    .padding(.vertical)
                     
-                    Text("Mission Highlights")
+                    Text(mission.formattedLaunchDateDetailed)
                         .font(.title.bold())
                         .padding(.bottom, 5)
                     
-                    Text(mission.description)
-                
-                    DividerView()
+                    VStack(alignment: .leading){
+        
+                        DividerView()
+                        
+                        Text("Mission Highlights")
+                            .font(.title.bold())
+                            .padding(.bottom, 5)
+                        
+                        Text(mission.description)
                     
-                    Text("Crew")
-                        .font(.title.bold())
-                        .padding(.bottom, 5)
-                }
-                .padding(.horizontal)
-                
-                ScrollView(.horizontal, showsIndicators: false){
-                    HStack{
-                        ForEach(crew, id: \.role) { crewMember in
-                            NavigationLink{
-                                AstronautView(astronaut: crewMember.astronaut)
-                            } label: {
-                                AstronautListView(crewMember: crewMember.astronaut, role: crewMember.role)
+                        DividerView()
+                        
+                        Text("Crew")
+                            .font(.title.bold())
+                            .padding(.bottom, 5)
+                    }
+                    .padding(.horizontal)
+                    
+                    ScrollView(.horizontal, showsIndicators: false){
+                        HStack{
+                            ForEach(crew, id: \.role) { crewMember in
+                                NavigationLink(value: crewMember){
+                                    AstronautListView(crewMember: crewMember.astronaut, role: crewMember.role)
+                                }
+                                .navigationDestination(for: CrewMember.self){ crewMember in
+                                    AstronautView(astronaut: crewMember.astronaut)
+                                }
+                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
                         }
                     }
                 }
+                .padding(.bottom)
             }
-            .padding(.bottom)
+            .navigationTitle(mission.displayName)
+            .navigationBarTitleDisplayMode(.inline)
+            .background(.darkBackground)
         }
-        .navigationTitle(mission.displayName)
-        .navigationBarTitleDisplayMode(.inline)
-        .background(.darkBackground)
     }
     
     init(mission: Missions, astronauts: [String: Astronaut]) {
