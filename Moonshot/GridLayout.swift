@@ -19,12 +19,11 @@ struct GridLayout: View {
     @State private var toggleView = false
     var body: some View {
         // not adding navStack here cuz, in contentView we have navLink so when that is called the title gets added there instead of adding 2 titles
+        NavigationStack{
             ScrollView{
                 LazyVGrid(columns: columns){
                     ForEach(missions) { mission in
-                        NavigationLink{
-                            MissionView(mission: mission, astronauts: astronauts)
-                        } label: {
+                        NavigationLink(value: mission){
                             VStack{
                                 Image(mission.imageName)
                                     .resizable()
@@ -50,6 +49,9 @@ struct GridLayout: View {
                                     .stroke(.lightBackground)
                             )
                         }
+                        .navigationDestination(for: Missions.self){ mission in
+                            MissionView(mission: mission, astronauts: astronauts)
+                        }
                     }
                 }
                 .padding([.horizontal, .bottom])
@@ -58,6 +60,7 @@ struct GridLayout: View {
             .background(.darkBackground)
             // this says that its always dark color theme
             .preferredColorScheme(.dark)
+        }
     }
 }
 

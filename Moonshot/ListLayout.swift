@@ -13,47 +13,51 @@ struct ListLayout: View {
     let missions: [Missions]
     
     var body: some View {
-        List{
-            ForEach(missions) { mission in
-                NavigationLink{
-                    MissionView(mission: mission, astronauts: astronauts)
-                } label: {
-                    HStack{
-                        Image(mission.imageName)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
+        NavigationStack{
+            List{
+                ForEach(missions) { mission in
+                    NavigationLink(value: mission){
+                        HStack{
+                            Image(mission.imageName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .padding()
+                            VStack{
+                                Text(mission.displayName)
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .bold()
+                                Text(mission.formattedLaunchDate)
+                                    .font(.headline)
+                                    .foregroundColor(.gray)
+                            }
                             .padding()
-                        VStack{
-                            Text(mission.displayName)
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .bold()
-                            Text(mission.formattedLaunchDate)
-                                .font(.headline)
-                                .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity)
+                            .background(.lightBackground)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(.lightBackground)
+                        .padding(.horizontal)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.lightBackground)
+                        )
                     }
-                    .padding(.horizontal)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(.lightBackground)
-                    )
+                    .navigationDestination(for: Missions.self){ mission in
+                        MissionView(mission: mission, astronauts: astronauts)
+                    }
+                    
                 }
+                // makes the background of the listItem
+                .listRowBackground(Color.darkBackground)
             }
-            // makes the background of the listItem
-            .listRowBackground(Color.darkBackground)
+            //It removes the default grouped/sectioned styling of a List, especially on iOS (which normally applies insets, background colors, and spacing between sections). It gives a clean, flat appearance, similar to the basic table view in UIKit.
+            .listStyle(.plain)
+            .navigationTitle("MoonShot as List")
+            .background(.darkBackground)
+            .preferredColorScheme(.dark)
         }
-        //It removes the default grouped/sectioned styling of a List, especially on iOS (which normally applies insets, background colors, and spacing between sections). It gives a clean, flat appearance, similar to the basic table view in UIKit.
-        .listStyle(.plain)
-        .navigationTitle("MoonShot as List")
-        .background(.darkBackground)
-        .preferredColorScheme(.dark)
     }
 }
 
